@@ -44,12 +44,15 @@ class Hangman
     if guess.match(/[a-zA-Z]/) && guess.length == 1
       guess
     else
-      puts 'Please enter a single letter'
-      getting_guess
+      '-1'
     end
   end
-
+  
   def check_guess(guess)
+    if guess == '-1'
+      puts 'Please enter a single letter'
+      return
+    end
     if @game.guessed_letters.include?(guess)
       puts 'You already tried this letter'
     else
