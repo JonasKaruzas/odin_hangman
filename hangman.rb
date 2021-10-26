@@ -16,7 +16,10 @@ class Hangman
       @game = Game.new(getting_word)
       play
     elsif selection == '2'
-      p 'load game'
+      puts '--- LOADING GAME ---'
+      load_game
+      puts '--- GAME LOADED ---'
+      play
     else
       select_game
     end
@@ -115,8 +118,15 @@ class Hangman
 
   def save_game
     File.open('saved_game.yaml', 'w') do |file|
-    file.puts YAML::dump(@game)
+      file.puts YAML::dump(@game)
     end  
+  end
+
+  def load_game
+    File.open('saved_game.yaml', 'r') do |file|
+      @game = YAML::load(file)
+    end
+
   end
 
   def play
