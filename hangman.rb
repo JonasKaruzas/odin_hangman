@@ -16,7 +16,6 @@ class Hangman
       @game = Game.new(getting_word)
       play
     elsif selection == '2'
-      puts '--- LOADING GAME ---'
       load_game
       puts '--- GAME LOADED ---'
       play
@@ -52,7 +51,6 @@ class Hangman
     if guess.match(/[a-zA-Z]/) && guess.length == 1
       return guess
     end
-    puts 'aaaa'
     '-1'
   end
   
@@ -76,9 +74,6 @@ class Hangman
   end
 
   def display_hidden_word
-    puts "Secret text - #{@game.secret_word}" #delete before finish
-    puts ''
-
     rx = if @game.guessed_letters.length.zero?
            Regexp.new "[#{@game.secret_word}]"
          else
@@ -108,36 +103,35 @@ class Hangman
 
   def display_winning_message
     puts ''
-    puts 'You are the winner!'
+    puts "You are the winner! The word was #{@game.secret_word}"
   end
 
   def display_loser_message
     puts ''
-    puts 'You lost :('
+    puts "You lost :( The word was #{@game.secret_word}"
   end
 
   def save_game
     File.open('saved_game.yaml', 'w') do |file|
-      file.puts YAML::dump(@game)
-    end  
+      file.puts YAML.dump(@game)
+    end
   end
 
   def load_game
     File.open('saved_game.yaml', 'r') do |file|
-      @game = YAML::load(file)
+      @game = YAML.load(file)
     end
 
   end
 
   def play
     until @game.game_won || @game_lost
-      puts ''
-      puts ''
       display_hidden_word
       display_guessed_letters
       display_guess_count
       check_guess(check_input(getting_guess))
       checking_game_won
+      3.times { puts '' }
     end
     if @game.game_won
       display_winning_message
@@ -149,5 +143,3 @@ end
 
 h = Hangman.new
 h.select_game
-
-
