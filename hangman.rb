@@ -1,4 +1,5 @@
 require_relative 'game'
+require 'yaml'
 # Game Hangman
 class Hangman
 
@@ -36,16 +37,20 @@ class Hangman
 
   def getting_guess
     puts ''
-    puts 'Enter your guess'
+    puts 'Enter your guess (a-z) or (5) to SAVE the game'
     gets.chomp.downcase
   end
 
   def check_input(guess)
-    if guess.match(/[a-zA-Z]/) && guess.length == 1
-      guess
-    else
-      '-1'
+    if guess == '5'
+      save_game
+      puts '---GAME SAVED---'
     end
+    if guess.match(/[a-zA-Z]/) && guess.length == 1
+      return guess
+    end
+    puts 'aaaa'
+    '-1'
   end
   
   def check_guess(guess)
@@ -108,8 +113,16 @@ class Hangman
     puts 'You lost :('
   end
 
+  def save_game
+    File.open('saved_game.yaml', 'w') do |file|
+    file.puts YAML::dump(@game)
+    end  
+  end
+
   def play
     until @game.game_won || @game_lost
+      puts ''
+      puts ''
       display_hidden_word
       display_guessed_letters
       display_guess_count
